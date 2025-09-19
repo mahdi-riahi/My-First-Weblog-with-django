@@ -1,0 +1,26 @@
+{% extends '_base.html' %}
+{% block title %}Log In{% endblock title %}
+
+{% block content %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-8" style="padding-left: 250px">
+                <h1 style="padding-left: 180px">Login</h1>
+                <div class="card shadow my-5 p-5">
+                    {% if user.is_authenticated %}
+                        <h3>You have already logged in</h3>
+                        <h4>First log out from this account and then try to log in with another account</h4>
+                    {% else %}
+                        <form method="POST">
+                            {% csrf_token %}
+                            <table>
+                                {{ form.as_table }}
+                            </table>
+                            <button type="submit" class="btn btn-success" style="margin-left: 120px">Submit</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

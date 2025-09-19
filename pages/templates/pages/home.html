@@ -1,0 +1,57 @@
+{% extends '_base.html' %}
+{% block title %}Home Page{% endblock title %}
+{% block content %}
+    <div style="width: 100%; background-color: #417893">
+    <div class="container " >
+            <div class="row">
+                <div class="col-9" style="">
+
+                    <div class="card shadow my-5 p-5">
+                        <h3 style="font-family: 'Harlow Solid Italic';">Check out the Blog home page and review the published posts</h3> <br>
+                        <a href="{% url 'post_list' %}">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-info" type="button">Go To Blog Home Page</button>
+                        </div>
+                        </a>
+                    </div>
+
+                    <div class="card shadow my-5 p-5">
+                        <h3 style="font-family: 'Harlow Solid Italic';">Get started and Write & Share new posts on Blog</h3> <br>
+                        <a href="{% url 'post_create' %}">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success" type="button">Add a new post</button>
+                        </div>
+                        </a>
+                    </div>
+
+                    <div class="card shadow my-5 p-5">
+                        <h3 style="font-family: 'Harlow Solid Italic';">Log in and enjoy using the weblog or Sign up if you don't have an account</h3> <br>
+                        <div class="card shadow my-2 p-5">
+                            <a href="{% url 'login' %}">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-warning" type="button">Log In</button>
+                            </div>
+                                <br>
+                            </a>
+                            <a href="{% url 'signup' %}">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-info" type="button">Sign Up</button>
+                            </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card shadow my-5 p-5">
+                        <h3 style="font-family: 'Harlow Solid Italic';">Read about us</h3> <br>
+                        <a href="{% url 'about' %}">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-danger" type="button">About-us page</button>
+                        </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
