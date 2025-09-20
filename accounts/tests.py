@@ -4,11 +4,6 @@ from django.shortcuts import reverse
 
 
 class AccountsTest(TestCase):
-    """"
-    log in url,by-name / log in post / after log in check login & signup pages / after log in check 'welcome, buttons,...' /
-    log out post /
-    sign up url,by-name / sign up post existing user info / sign up post & check redirection to log in /
-    """
     @classmethod
     def setUpTestData(cls):
         cls.user1 = User.objects.create_user(
@@ -16,14 +11,15 @@ class AccountsTest(TestCase):
             password='ajjfdnwieu332HHHvvdf/',
         )
 
+    # log in
     def test_login_url(self):
         response1 = self.client.get(reverse('login'))
         self.assertEqual(response1.status_code, 200)
         response2 = self.client.get('/accounts/login/')
         self.assertEqual(response2.status_code, 200)
-        self.assertNotContains(response2, 'You have already logged in')
         self.assertContains(response2, 'Sign up')
         self.assertContains(response2, 'Log in')
+        self.assertNotContains(response2, 'You have already logged in')
 
     def test_login(self):
         response1 = self.client.post(reverse('login'), {
@@ -39,9 +35,11 @@ class AccountsTest(TestCase):
         response3 = self.client.get('/accounts/signup/')
         self.assertContains(response3, 'You have logged in. First log out and then sign up for another account')
 
+        # log out
         response4 = self.client.post(reverse('logout'))
         self.assertEqual(response4.status_code, 302)
 
+    # sign up
     def test_signup_url(self):
         response1 = self.client.get(reverse('signup'))
         self.assertEqual(response1.status_code, 200)

@@ -177,7 +177,6 @@ class BlogTest(TestCase):
             'author': 'david',
             'text': 'this is awesome.',
             'email_address': 'davidcopperfield111@yahoo.com',
-            'related_post': self.post2.id,
         })
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Comment.objects.last().author, 'david')
