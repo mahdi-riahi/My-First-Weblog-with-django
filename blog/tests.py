@@ -5,7 +5,7 @@ from django.shortcuts import reverse
 from .models import Post, Comment
 
 
-class PostTest(TestCase):
+class BlogTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = User.objects.create(username='Nayebzad')
@@ -21,8 +21,13 @@ class PostTest(TestCase):
             status='d',
             author=cls.user,
         )
+        cls.comment = Comment.objects.create(
+            author='Mehrdad',
+            text='Awesome comment',
+            related_post=cls.post1,
+        )
 
-    # objects and models
+    # Post model and objects
     def test_post_model_str(self):
         self.assertEqual(self.post1.title, str(self.post1))
 
@@ -64,7 +69,7 @@ class PostTest(TestCase):
         self.assertEqual(response2.status_code, 200)
 
     def test_post_detail_not_found_404(self):
-        response = self.client.get(reverse('post_detail', args=[self.post2.id+1, ]))
+        response = self.client.get(reverse('post_detail', args=[self.post2.id + 1, ]))
         self.assertEqual(response.status_code, 404)
 
     def test_post_detail(self):
@@ -86,7 +91,7 @@ class PostTest(TestCase):
         self.assertEqual(response2.status_code, 200)
 
     def test_post_create(self):
-        response = self.client.post(reverse('post_create'),{
+        response = self.client.post(reverse('post_create'), {
             'title': 'my title',
             'content': 'my content',
             'status': 'p',
@@ -148,3 +153,34 @@ class PostTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertNotEqual(Post.objects.last().title, 'title2')
         self.assertNotEqual(Post.objects.last().content, 'content2')
+
+    # comment model and objects
+    def test_comment_model_str(self):
+        self.assertEqual(self.comment.text, str(self.comment))
+
+    def test_comment_object_detail(self):
+        self.assertEqual(self.comment.author, 'Mehrdad')
+        self.assertEqual(self.comment.text, 'Awesome comment')
+        self.assertEqual(self.comment.related_post, self.post1)
+
+    def test_comment_existence_for_post1(self):
+        response = self.client.get(reverse('post_detail', args=[self.post1.id, ]))
+        self.assertContains(response, self.comment.author)
+        self.assertContains(response, self.comment.text)
+
+    def test_comment_existence_for_post2(self):
+        response = self.client.get(reverse('post_detail', args=[self.post2.id, ]))
+        self.assertNotContains(response, self.comment.text)
+
+    def test_comment_post_new_comment(self):
+        response = self.client.post(reverse('post_detail', args=[self.post2.id, ]), {
+            'author': 'david',
+            'text': 'this is awesome.',
+            'email_address': 'davidcopperfield111@yahoo.com',
+            'related_post': self.post2.id,
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Comment.objects.last().author, 'david')
+        self.assertEqual(Comment.objects.last().text, 'this is awesome.')
+        self.assertEqual(Comment.objects.last().email_address, 'davidcopperfield111@yahoo.com')
+        self.assertEqual(Comment.objects.last().related_post, self.post2)
